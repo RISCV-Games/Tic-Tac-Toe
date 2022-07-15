@@ -6,7 +6,7 @@
 .eqv y_tile_offset 76
 
 .data
-BOARD: .byte 1, 1, 1, -1, 0, -1, 1, 1, 1
+BOARD: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0
 PLAYER_SYMBOL: .word 0
 ENEMY_SYMBOL: .word 0
 

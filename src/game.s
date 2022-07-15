@@ -19,14 +19,14 @@ INIT:
 
 MAIN:
   jal RENDER_GAME
-  jal HANDLE
+  jal INPUT
   j MAIN
 
 
 # Imports
 .include "video.s"
 .include "render_game.s"
-# .include "keyboard.s"
+.include "keyboard.s"
 
 # Data includes
 .data

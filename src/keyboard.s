@@ -7,9 +7,45 @@ INPUT:
   	
   # Go inside options
   li t0 0x31			#1
-	beq t2, t0, INPUT  
+	beq t2, t0, OP
 	li t0 0x32			#2
-	beq t2 ,t0, INPUT
+	beq t2 ,t0, OP
+	li t0 0x33			#3
+	beq t2 ,t0, OP
+	li t0 0x34			#4
+	beq t2 ,t0, OP
+	li t0 0x35			#5
+	beq t2 ,t0, OP
+	li t0 0x36			#6
+	beq t2 ,t0, OP
+	li t0 0x37			#7
+	beq t2 ,t0, OP
+	li t0 0x38			#8
+	beq t2 ,t0, OP
+	li t0 0x39			#9
+	beq t2 ,t0, OP
 	li t0, 0x20			#ENTER
-	beq t2, t0, INPUT
-	j INPUT
+	beq t2, t0, INPUT_FIM
+	j INPUT_FIM
+
+OP:
+  addi a0, t2, -0x31
+
+  addi sp, sp, -4
+  sw ra, 0(sp)
+
+  jal PLAYER_MOVE
+
+  lw ra, 0(sp)
+  addi sp, sp, 4
+  j INPUT_FIM
+
+PLAYER_MOVE:
+  la t0, BOARD # Default 
+  add t1, a0, t0
+  li t2, 1
+  sb t2, 0(t1)
+  ret
+
+INPUT_FIM:
+  ret
