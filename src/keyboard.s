@@ -1,4 +1,6 @@
 INPUT:
+  bne s4, zero, INPUT_FIM
+
 	li t1,0xFF200000		      # carrega o endere�o de controle do KDMMIO
  	lw t0,0(t1)			          # Le bit de Controle Teclado
   andi t0,t0,0x0001		      # mascara o bit menos significativo
@@ -45,6 +47,7 @@ PLAYER_MOVE:
   add t1, a0, t0
   li t2, 1
   sb t2, 0(t1)
+  xori s4, s4, 1
   ret
 
 INPUT_FIM:
