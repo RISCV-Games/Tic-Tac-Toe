@@ -48,8 +48,8 @@ CHOOSE_SYMBOL2:
   j GAME_LOOP
 
 GAME_LOOP:
-  jal CHECK_VICTORY_CONDITION
   jal RENDER_GAME
+  jal CHECK_VICTORY_CONDITION
   jal ENEMY_OUTPUT
   jal INPUT
   j GAME_LOOP
@@ -61,6 +61,7 @@ GAME_LOOP:
 .include "keyboard.s"
 .include "enemy.s"
 .include "menu.s"
+.include "ai.s"
 .include "game_logic.s"
 
 # Data includes

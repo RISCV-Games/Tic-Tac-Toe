@@ -35,6 +35,27 @@ GET_MEDIUM_OUTPUT:
   ret
 
 GET_HARD_OUTPUT:
+  # currentPlayer = (s4 == 0) ? 1:-1
+  li t0, -2
+  mul t0, t0, s4 
+  addi t0, t0, 1 
+
+  la t1, currentPlayer
+  sb t0, 0(t1)
+
+  addi sp, sp, -4
+  sw ra, 0(sp)
+
+  jal findBestMove
+
+  lw ra, 0(sp)
+  addi sp, sp, 4
+
+  la t0, currentPlayer
+  lb t0, 0(t0)
+  la t1, BOARD 
+  add t1, t1, a0
+  sb t0, 0(t1)
 
   xori s4, s4, 1 # Change Turns
   ret
