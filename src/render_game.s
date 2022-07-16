@@ -6,6 +6,7 @@
 .eqv y_tile_offset 76
 
 .data
+.align 2
 BOARD: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0
 PLAYER_SYMBOL: .word 0
 ENEMY_SYMBOL: .word 0

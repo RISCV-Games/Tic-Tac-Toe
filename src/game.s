@@ -48,11 +48,10 @@ CHOOSE_SYMBOL2:
   j GAME_LOOP
 
 GAME_LOOP:
-# jal CHECKAR_CONDICAO_DE_VITORIA <- AQUI DUDU
-
+  jal CHECK_VICTORY_CONDITION
   jal RENDER_GAME
+  jal ENEMY_OUTPUT
   jal INPUT
-  jal ENEMY_OUTPUT <- AQUI DUDU
   j GAME_LOOP
 
 
@@ -62,6 +61,7 @@ GAME_LOOP:
 .include "keyboard.s"
 .include "enemy.s"
 .include "menu.s"
+.include "game_logic.s"
 
 # Data includes
 .data

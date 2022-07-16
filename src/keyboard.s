@@ -46,6 +46,10 @@ PLAYER_MOVE:
   la t0, BOARD # Default 
   add t1, a0, t0
   li t2, 1
+
+  lb t3, 0(t1)
+  bnez t3, INPUT_FIM
+
   sb t2, 0(t1)
   xori s4, s4, 1
   ret
