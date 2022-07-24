@@ -147,6 +147,10 @@ CHECK_VICTORY_CONDITION:
 	sw zero, 4(t0)
 	sb zero, 8(t0)
 
+	# alternate the starting player
+	xori s4, s6, 1
+	mv s6, s4
+
 
 CHECK_VICTORY_CONDITION_END:
 	lw ra, 0(sp)
