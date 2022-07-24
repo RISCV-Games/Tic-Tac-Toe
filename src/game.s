@@ -65,6 +65,7 @@ GAME_LOOP:
 .include "menu.s"
 .include "ai.s"
 .include "game_logic.s"
+.include "endscreens.s"
 
 # Data includes
 .data
@@ -73,3 +74,6 @@ GAME_LOOP:
 .include "../data/malina1.data"
 .include "../data/menu1teste.data"
 .include "../data/menu2teste.data"
+.include "../data/telaVitoria.data"
+.include "../data/telaDerrota.data"
+.include "../data/telaEmpate.data"

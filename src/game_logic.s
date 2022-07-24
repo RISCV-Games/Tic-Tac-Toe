@@ -1,4 +1,15 @@
 .eqv game_ongoing 2
+.eqv player_win 1
+.eqv player_loose -1
+.eqv player_draw 0
+
+.data 
+# SCORE + 0 = &WINS
+# SCORE + 1 = &LOSSES
+# SCORE + 2 = &TOTAL
+SCORE: .byte 0 0 0
+
+.text
 
 # ---------------------------------------------------
 # Helper function for determining if the game is over.
@@ -62,7 +73,8 @@ checkDraw_notDrawn:
 	
 
 # ---------------------------------------------------
-# Returns 1 if O wins, -1 if X wins, 0 if it is a draw and 2 otherwise.
+# Returns player_win if O wins, player_loose if X wins, 
+# player_draw if it is a draw and game_ongoing otherwise.
 checkEnd:
 	# Push ra to stack
 	addi sp, sp, -4
@@ -136,11 +148,62 @@ CHECK_VICTORY_CONDITION:
 	jal checkEnd 
 	li t0, game_ongoing
 	beq a0, t0, CHECK_VICTORY_CONDITION_END
+	
+	la t2, SCORE
 
+	# if player won then *(SCORE)++;
+	li t0, player_win 
+	bne a0, t0, CHECK_VICTORY_CONDITION_NOT_WIN
+	lbu t1, 0(t2)
+	addi t1, t1, 1
+	sb t1, 0(t2)
+
+CHECK_VICTORY_CONDITION_NOT_WIN:
+	# if player won then *(SCORE+1)++;	
+	li t0, player_loose
+	bne a0, t0, CHECK_VICTORY_CONDITION_NOT_LOOSE
+	lbu t1, 1(t2)
+	addi t1, t1, 1
+	sb t1, 1(t2)
+
+CHECK_VICTORY_CONDITION_NOT_LOOSE:
+	lbu t0, 2(t2)
+	addi t0, t0, 1
+	sb t0, 2(t2)
+
+	# if player won 5 matches goto win screen
+	lbu t3, 0(t2)
+	li t1, 5
+	beq t3, t1, PLAYER_WIN_SCREEN
+
+	# if player lost 5 matches goto loose screen
+	lbu t4, 1(t2)
+	beq t4, t1, PLAYER_LOOSE_SCREEN
+
+	# if 20 games were drawn goto draw screen 
+	add t0, t3, t4 
+	bne t0, zero, CHECK_VICTORY_CONDITION_NOT_20_DRAWS
+	li t0, 20 
+	lbu t1, 2(t2)
+	beq t1, t0, PLAYER_DRAW_SCREEN
+
+CHECK_VICTORY_CONDITION_NOT_20_DRAWS:
+	# otherwise, if 20 games were reached then the player with the most victories wins.
+	li t0, 20 
+	lbu t1, 2(t2)
+	bne t1, t0, CHECK_VICTORY_CONDITION_MATCH_CONTINUES
+
+	lbu t0, 0(t2)
+	lbu t1, 1(t2)
+	bgt t0, t1, PLAYER_WIN_SCREEN
+	bgt t1, t0, PLAYER_LOOSE_SCREEN
+	jal PLAYER_DRAW_SCREEN
+
+CHECK_VICTORY_CONDITION_MATCH_CONTINUES:
 	# remover esse ecall de sleep
 	li a7, 32
 	li a0, 2000
-	ecall
+	#ecall
 
 	la t0, BOARD 
 	sw zero, 0(t0)
