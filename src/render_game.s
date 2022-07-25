@@ -25,7 +25,7 @@ RENDER_GAME:
   la t0, DELTATIME
   lw t1, 0(t0)
   sub t2, a0, t1
-  li t3, 500
+  li t3, 60
   bgt t2, t3, RENDER_GAME_NEXT
   ret
 
@@ -61,7 +61,7 @@ RENDER_GAME_NEXT:
   li a2, 74 # Y
   la a0, SCORE
   lbu a0, 0(a0)
-  ecall 101
+  ecall
 
   # Printando velhas
   li a1, 45 # X
@@ -73,14 +73,14 @@ RENDER_GAME_NEXT:
   lbu a0, 2(a0) # Número total
   add t1, t1, t2 # Derrotas + vitorias
   sub a0, a0, t1
-  ecall 101
+  ecall
 
   # Printando derrotas
   li a1, 45 # X
   li a2, 107 # Y
   la a0, SCORE
   lbu a0, 1(a0)
-  ecall 101
+  ecall
 
   lw s0, 0(sp)
   lw s1, 4(sp)
