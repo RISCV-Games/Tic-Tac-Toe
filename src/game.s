@@ -7,6 +7,8 @@
 #   s5: dificulty
 #	  s6: starting player (0 - Player, 1 - ENEMY)
 
+.include "MACROSv21.s"
+
 .text
 # Initialization
 INIT:
@@ -17,20 +19,20 @@ INIT:
 
 MENUS:
   # Dificulty menu 
-  la a0, menu2teste # Menu Data
+  la a0, MenuDificuldades # Menu Data
   jal DRAW_MENU
   mv s5, a0 # Putting dificulty in s5
 
   # Symbol menu
   # la a0, menu2
-  la a0, menu1teste # Menu Data
+  la a0, MenuSimbolos # Menu Data
   jal DRAW_MENU
   beq a0, zero, CHOOSE_SYMBOL1
   j CHOOSE_SYMBOL2
 
 CHOOSE_SYMBOL1:
-  la t0, heroStop1
-  la t1, malina1
+  la t0, SYMBOL1_ANIMATION
+  la t1, SYMBOL2_ANIMATION
   la t2, PLAYER_SYMBOL
   la t3, ENEMY_SYMBOL
 
@@ -40,8 +42,8 @@ CHOOSE_SYMBOL1:
   
 
 CHOOSE_SYMBOL2:
-  la t0, heroStop1
-  la t1, malina1
+  la t0, SYMBOL1_ANIMATION
+  la t1, SYMBOL2_ANIMATION
   la t2, PLAYER_SYMBOL
   la t3, ENEMY_SYMBOL
 
@@ -56,7 +58,6 @@ GAME_LOOP:
   jal INPUT
   j GAME_LOOP
 
-
 # Imports
 .include "video.s"
 .include "render_game.s"
@@ -66,14 +67,28 @@ GAME_LOOP:
 .include "ai.s"
 .include "game_logic.s"
 .include "endscreens.s"
+.include "SYSTEMv21.s"
 
 # Data includes
 .data
-.include "../data/tabuleiroTeste.data"
-.include "../data/heroStop1.data"
-.include "../data/malina1.data"
-.include "../data/menu1teste.data"
-.include "../data/menu2teste.data"
-.include "../data/telaVitoria.data"
-.include "../data/telaDerrota.data"
-.include "../data/telaEmpate.data"
+.include "../data/Board.data"
+.include "../data/MenuGanhou.data"
+.include "../data/MenuPerdeu.data"
+.include "../data/MenuEmpatou.data"
+.include "../data/MenuSimbolos.data"
+.include "../data/MenuDificuldades.data"
+
+# Animations
+.data
+.include "../data/xAnimation/x0.data"
+.include "../data/xAnimation/x1.data"
+.include "../data/xAnimation/x2.data"
+.include "../data/xAnimation/x3.data"
+.include "../data/xAnimation/x4.data"
+.include "../data/xAnimation/x5.data"
+.include "../data/oAnimation/o0.data"
+.include "../data/oAnimation/o1.data"
+.include "../data/oAnimation/o2.data"
+.include "../data/oAnimation/o3.data"
+.include "../data/oAnimation/o4.data"
+.include "../data/oAnimation/o5.data"

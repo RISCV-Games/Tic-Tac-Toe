@@ -1,26 +1,97 @@
 .eqv board_size 9
-.eqv x_board_offset 40
-.eqv y_board_offset 32
+.eqv x_board_offset 105
+.eqv y_board_offset 25
 
-.eqv x_tile_offset 104
-.eqv y_tile_offset 76
+.eqv x_tile_offset 80
+.eqv y_tile_offset 80
 
 .data
 .align 2
 BOARD: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0
 PLAYER_SYMBOL: .word 0
 ENEMY_SYMBOL: .word 0
+SYMBOL1_ANIMATION: .word 6, 1, x0, x1, x2, x3, x4, x5
+SYMBOL2_ANIMATION: .word 6, 1, o0, o1, o2, o3, o4, o5
+
+DELTATIME: .word 0
 
 .text
 RENDER_GAME:
   # Saving return address in the stack
+
+  li a7, 30
+  ecall 
+
+  la t0, DELTATIME
+  lw t1, 0(t0)
+  sub t2, a0, t1
+  li t3, 500
+  bgt t2, t3, RENDER_GAME_NEXT
+  ret
+
+RENDER_GAME_NEXT:
+  sw a0, 0(t0)
+
   addi sp, sp, -4
   sw ra, 0(sp)
   # Rendering Back Ground
-  la a0, tabuleiroTeste
+  la a0, Board
   li a1, 0
   li a2, 0
   jal RENDER
+
+  # Rendering placar
+  addi sp, sp, -32
+  sw s0, 0(sp)
+  sw s1, 4(sp)
+  sw s2, 8(sp)
+  sw s3, 12(sp)
+  sw s4, 16(sp)
+  sw s5, 20(sp)
+  sw s6, 24(sp)
+  sw s7, 28(sp)
+
+  li a3, 0x09B6 # Color
+  li a7, 101
+  lw a4, 0(s3) # Frame
+  xori a4, a4, 1
+
+  # Pritando vitorias
+  li a1, 45 # X
+  li a2, 74 # Y
+  la a0, SCORE
+  lbu a0, 0(a0)
+  ecall 101
+
+  # Printando velhas
+  li a1, 45 # X
+  li a2, 90 # Y
+
+  la a0, SCORE
+  lbu t1, 0(a0) # Número de vitorias
+  lbu t2, 0(a0) # Número de derrotas
+  lbu a0, 2(a0) # Número total
+  add t1, t1, t2 # Derrotas + vitorias
+  sub a0, a0, t1
+  ecall 101
+
+  # Printando derrotas
+  li a1, 45 # X
+  li a2, 107 # Y
+  la a0, SCORE
+  lbu a0, 1(a0)
+  ecall 101
+
+  lw s0, 0(sp)
+  lw s1, 4(sp)
+  lw s2, 8(sp)
+  lw s3, 12(sp)
+  lw s4, 16(sp)
+  lw s5, 20(sp)
+  lw s6, 24(sp)
+  lw s7, 28(sp)
+  addi sp, sp, 32
+
 
   # Looping trough Board
   li t0, 0 # Iterador
@@ -98,7 +169,7 @@ RENDER_SYMBOL_PLAYER:
   lw a0, 0(a0)
   addi a1, t5, x_board_offset
   addi a2, t6, y_board_offset
-  jal RENDER
+  jal DRAW_ANIMATION
   j END_RENDER_SYMBOL
 
 RENDER_SYMBOL_ENEMY:
@@ -118,7 +189,7 @@ RENDER_SYMBOL_ENEMY:
   lw a0, 0(a0)
   addi a1, t5, x_board_offset
   addi a2, t6, y_board_offset
-  jal RENDER
+  jal DRAW_ANIMATION
   j END_RENDER_SYMBOL
 
 END_RENDER_SYMBOL:
@@ -127,3 +198,21 @@ END_RENDER_SYMBOL:
   addi sp, sp, 4
   ret
 
+
+# a0 = label for animation
+DRAW_ANIMATION:
+  lw t0, 0(a0)   #Tamanho da animatição
+  lw t1, 4(a0)  #Posicao atual da animacao
+  ble t1, t0, DRAW_ANIMATION_PROX # Conferindo para ver se a animação acabou
+  li t1, 1
+  sw t1, 4(a0)
+
+# Desenhando a sprite
+DRAW_ANIMATION_PROX:  
+  addi t2, t1, 1
+  sw t2, 4(a0) 
+  slli t1, t1, 2
+  addi t1, t1, 4
+  add a0, a0, t1
+  lw a0, 0(a0)
+  j RENDER

@@ -1,11 +1,11 @@
 PLAYER_WIN_SCREEN:
-  la a0, telaVitoria 
+  la a0, MenuGanhou
   jal RENDER_END_SCREEN
 PLAYER_LOOSE_SCREEN:
-  la a0, telaDerrota 
+  la a0, MenuPerdeu 
   jal RENDER_END_SCREEN
 PLAYER_DRAW_SCREEN:
-  la a0, telaEmpate 
+  la a0, MenuEmpatou 
   jal RENDER_END_SCREEN
 
 # a0 = endscreen address
