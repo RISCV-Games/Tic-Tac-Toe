@@ -12,6 +12,17 @@
 .text
 # Initialization
 INIT:
+  # Reset board
+	la t0, BOARD 
+	sw zero, 0(t0)
+	sw zero, 4(t0)
+	sb zero, 8(t0)
+
+  # Reset placar
+  la t0, SCORE
+  sh zero, 0(t0)
+  sb zero, 2(t0)
+
   jal INIT_VIDEO
 
   li s4, 0

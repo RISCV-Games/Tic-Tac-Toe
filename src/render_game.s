@@ -69,7 +69,7 @@ RENDER_GAME_NEXT:
 
   la a0, SCORE
   lbu t1, 0(a0) # Número de vitorias
-  lbu t2, 0(a0) # Número de derrotas
+  lbu t2, 1(a0) # Número de derrotas
   lbu a0, 2(a0) # Número total
   add t1, t1, t2 # Derrotas + vitorias
   sub a0, a0, t1

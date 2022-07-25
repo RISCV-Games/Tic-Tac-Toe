@@ -22,25 +22,31 @@ MENU_INPUT_LOOP:
   lw t2,4(t1)			          # le o valor da tecla
   	
   # Go inside options
-  li t0 0x31			#1
+  li t0, 0x31			#1
 	beq t2, t0, MENU_OP
-	li t0 0x32			#2
+	li t0, 0x32			#2
 	beq t2 ,t0, MENU_OP
-	li t0 0x33			#3
+	li t0, 0x33			#3
 	beq t2 ,t0, MENU_OP
-	li t0 0x34			#4
+	li t0, 0x34			#4
 	beq t2 ,t0, MENU_OP
-	li t0 0x35			#5
+	li t0, 0x35			#5
 	beq t2 ,t0, MENU_OP
-	li t0 0x36			#6
+	li t0, 0x36			#6
 	beq t2 ,t0, MENU_OP
-	li t0 0x37			#7
+	li t0, 0x37			#7
 	beq t2 ,t0, MENU_OP
-	li t0 0x38			#8
+	li t0, 0x38			#8
 	beq t2 ,t0, MENU_OP
-	li t0 0x39			#9
+	li t0, 0x39			#9
 	beq t2 ,t0, MENU_OP
+	li t0, 'q'			  #Q
+	beq t2 ,t0, MENU_SAIR
   j MENU_INPUT_LOOP
+
+MENU_SAIR:
+  li a7, 10
+  ecall
 
 MENU_OP:
   addi a0, t2, -0x31
