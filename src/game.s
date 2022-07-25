@@ -5,7 +5,7 @@
 #   s3: current frame address
 #   s4: turn (0 - Player, 1 - ENEMY)
 #   s5: dificulty
-#	s6: starting player (0 - Player, 1 - ENEMY)
+#	  s6: starting player (0 - Player, 1 - ENEMY)
 
 .text
 # Initialization

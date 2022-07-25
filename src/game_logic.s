@@ -205,6 +205,7 @@ CHECK_VICTORY_CONDITION_MATCH_CONTINUES:
 	li a0, 2000
 	#ecall
 
+  # Reset board
 	la t0, BOARD 
 	sw zero, 0(t0)
 	sw zero, 4(t0)

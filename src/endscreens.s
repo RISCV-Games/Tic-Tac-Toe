@@ -23,8 +23,21 @@ RENDER_END_SCREEN:
   addi sp, sp, 4
 
   li a7, 32
-  li a0, 10000
+  li a0, 5000
   ecall
+
+  la t0, SCORE 
+  sb zero, 0(t0)
+  sb zero, 1(t0)
+  sb zero, 2(t0)
+
+  # Reset board
+	la t0, BOARD 
+	sw zero, 0(t0)
+	sw zero, 4(t0)
+	sb zero, 8(t0)
+
+  jal INIT
   
   li a7, 10
   ecall
