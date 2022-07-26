@@ -10,7 +10,7 @@
 BOARD: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0
 PLAYER_SYMBOL: .word 0
 ENEMY_SYMBOL: .word 0
-SYMBOL1_ANIMATION: .word 6, 1, x0, x1, x2, x3, x4, x5
+SYMBOL1_ANIMATION: .word 6, 1, ax4, ax5, ax0, ax1, ax2, ax3
 SYMBOL2_ANIMATION: .word 6, 1, o0, o1, o2, o3, o4, o5
 
 DELTATIME: .word 0

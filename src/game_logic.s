@@ -8,12 +8,15 @@
 # SCORE + 1 = &LOSSES
 # SCORE + 2 = &TOTAL
 SCORE: .byte 0 0 0
+LINE_AMT: .float 1.0e-2
+STRING_TEST: .string "------\n";
 
 .text
 
 # ---------------------------------------------------
 # Helper function for determining if the game is over.
 # Returns 1 if O wins, -1 if X wins, 0 otherwise.
+# Return start square at a1 and end square at a2.
 # a0 = start
 # a1 = inc
 checkEndHelper:
@@ -24,6 +27,9 @@ checkEndHelper:
 	# t1 = &BOARD[start+inc], t2 = &BOARD[start+2*inc]
 	add t1, t0, a1 
 	add t2, t1, a1
+  # a2 = start + 2 *inc = end square
+  la t6, BOARD
+  sub a2, t2, t6
 	
 	# t0 = *t0
 	lb t0, 0(t0)
@@ -36,7 +42,8 @@ checkEndHelper:
 	lb t2, 0(t2)
 	bne t1, t2, checkEndHelper_false
 	
-	# Return winning player
+	# Return winning player and squares
+  mv a1, a0
 	mv a0, t0
 	ret
 	
@@ -121,7 +128,6 @@ checkEnd:
 	call checkEndHelper 
 	bnez a0, checkEnd_win
 
-
 	# check draw
 	call checkDraw
 	bnez a0, checkEnd_notDraw
@@ -148,7 +154,17 @@ CHECK_VICTORY_CONDITION:
 	jal checkEnd 
 	li t0, game_ongoing
 	beq a0, t0, CHECK_VICTORY_CONDITION_END
-	
+
+  addi sp, sp, -4
+  sw a0, 0(sp)
+
+  mv a0, a1
+  mv a1, a2
+  jal ANIMATE_LINE
+
+  lw a0, 0(sp)
+  addi sp, sp, 4
+
 	la t2, SCORE
 
 	# if player won then *(SCORE)++;
@@ -159,7 +175,7 @@ CHECK_VICTORY_CONDITION:
 	sb t1, 0(t2)
 
 CHECK_VICTORY_CONDITION_NOT_WIN:
-	# if player won then *(SCORE+1)++;	
+	# if player won then *(SCORE+1)++;
 	li t0, player_loose
 	bne a0, t0, CHECK_VICTORY_CONDITION_NOT_LOOSE
 	lbu t1, 1(t2)
@@ -200,11 +216,6 @@ CHECK_VICTORY_CONDITION_NOT_20_DRAWS:
 	jal PLAYER_DRAW_SCREEN
 
 CHECK_VICTORY_CONDITION_MATCH_CONTINUES:
-	# remover esse ecall de sleep
-	li a7, 32
-	li a0, 2000
-	#ecall
-
   # Reset board
 	la t0, BOARD 
 	sw zero, 0(t0)
@@ -215,8 +226,105 @@ CHECK_VICTORY_CONDITION_MATCH_CONTINUES:
 	xori s4, s6, 1
 	mv s6, s4
 
-
 CHECK_VICTORY_CONDITION_END:
 	lw ra, 0(sp)
 	addi sp, sp, 4
 	ret
+
+# Animate a line from square a0 to a1.
+ANIMATE_LINE:
+  addi sp, sp, -8
+  sw ra, 0(sp)
+  fsw fs0, 4(sp)
+
+  # (t0, t1) = (x0, y0)
+  # (t2, t3) = (x1, y1)
+  li t3, 3
+  rem t0, a0, t3
+  div t1, a0, t3
+
+  rem t2, a1, t3 
+  div t3, a1, t3
+
+  li t4, x_tile_offset
+  mul t0, t0, t4 
+  mul t2, t2, t4 
+  addi t0, t0, x_board_offset
+  addi t2, t2, x_board_offset
+
+  li t4, y_tile_offset 
+  mul t1, t1, t4 
+  mul t3, t3, t4
+  addi t1, t1, y_board_offset
+  addi t3, t3, y_board_offset
+  li t6, 14
+  add t0, t0, t6
+  add t1, t1, t6
+  add t2, t2, t6
+  add t3, t3, t6
+
+  li a5, 0
+  # fs0 = lerp amt
+  la t6, LINE_AMT 
+  flw fs0, 0(t6)
+ANIMATE_LINE_LOOP:
+  addi sp, sp, -16
+  sw t0, 0(sp)
+  sw t1, 4(sp)
+  sw t2, 8(sp)
+  sw t3, 12(sp)
+
+  fcvt.s.w ft0, t0
+  fcvt.s.w ft1, t1
+  fcvt.s.w ft2, t2
+  fcvt.s.w ft3, t3
+
+  fsub.s ft4, ft2, ft0 
+  fmul.s ft4, ft4, fs0 
+  fadd.s ft4, ft4, ft0 
+  fcvt.w.s a2, ft4
+
+  fsub.s ft4, ft3, ft1 
+  fmul.s ft4, ft4, fs0 
+  fadd.s ft4, ft4, ft1
+  fcvt.w.s a3, ft4
+
+  # draw line
+  mv a0, t0 
+  mv a1, t1
+  li a4, 0
+  li a7, 47 
+  ecall 
+
+  la t0, LINE_AMT
+  flw ft0, 0(t0)
+  fadd.s fs0, fs0, ft0
+
+  li t0, 1
+  fcvt.s.w ft0, t0 
+  flt.s t0, fs0, ft0 
+  beqz t0, ANIMATE_LINE_END
+
+  li a7, 32
+  li a0, 10
+  ecall
+
+  xori a5, a5, 1
+
+  lw t0, 0(sp)
+  lw t1, 4(sp)
+  lw t2, 8(sp)
+  lw t3, 12(sp)
+  addi sp, sp, 16
+  j ANIMATE_LINE_LOOP
+
+ANIMATE_LINE_END:
+  li a7, 32 
+  li a0, 1000
+  ecall
+
+  addi sp, sp, 16
+  lw ra, 0(sp)
+  flw fs0, 4(sp)
+  addi sp, sp, 8
+  ret
