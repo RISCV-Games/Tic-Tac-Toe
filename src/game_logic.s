@@ -158,10 +158,26 @@ CHECK_VICTORY_CONDITION:
   addi sp, sp, -4
   sw a0, 0(sp)
 
+  # If the game is drawn don't draw a line
+  li t0, player_draw
+  bne a0, t0, CHECK_VICTORY_CONDITION_ANIMATE_LINE
+  la a0, telaVelha
+  jal RENDER
+  jal SWAP_FRAMES
+  li a7, 32
+  li a0, 1000
+  ecall
+  j CHECK_VICTORY_CONDITION_UPDATE_SCORE
+
+
+CHECK_VICTORY_CONDITION_ANIMATE_LINE:
+  # If someone won the game animate the winning line
+
   mv a0, a1
   mv a1, a2
   jal ANIMATE_LINE
 
+CHECK_VICTORY_CONDITION_UPDATE_SCORE:
   lw a0, 0(sp)
   addi sp, sp, 4
 

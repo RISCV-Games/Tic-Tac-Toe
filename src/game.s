@@ -88,6 +88,7 @@ GAME_LOOP:
 .include "../data/MenuEmpatou.data"
 .include "../data/MenuSimbolos.data"
 .include "../data/MenuDificuldades.data"
+.include "../data/telaVelha.data"
 
 # Animations
 .data
