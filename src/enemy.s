@@ -2,12 +2,16 @@
 ENEMY_OUTPUT:
   beq s4, zero, FIM_ENEMY_OUTPUT
 
+  la t0, DELTATIME
+  li t1, 10000
+  sw t1, 0(t0)
+
   # Chosing difficulties
   beq s5, zero, GET_EASY_OUTPUT # easy
   li t0, 1
-  beq s5, t0, GET_MEDIUM_OUTPUT # medium <- Adicionar
+  beq s5, t0, GET_MEDIUM_OUTPUT # medium
   li t0, 2
-  beq s5, t0, GET_HARD_OUTPUT # hard <- Adicionar
+  beq s5, t0, GET_HARD_OUTPUT # hard
 
   # Never Reaches
   j FIM_ENEMY_OUTPUT

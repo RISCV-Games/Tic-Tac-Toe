@@ -158,9 +158,15 @@ CHECK_VICTORY_CONDITION:
   addi sp, sp, -4
   sw a0, 0(sp)
 
-  # If the game is drawn don't draw a line
+  # If the game is drawn don't draw a line, draw an old lady instead
   li t0, player_draw
   bne a0, t0, CHECK_VICTORY_CONDITION_ANIMATE_LINE
+  
+  # give the player some time to realize it why the game is drawn
+  li a7, 32
+  li a0, 500
+  ecall
+
   la a0, telaVelha
   jal RENDER
   jal SWAP_FRAMES

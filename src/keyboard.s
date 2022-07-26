@@ -51,6 +51,11 @@ PLAYER_MOVE:
   bnez t3, INPUT_FIM
 
   sb t2, 0(t1)
+
+  la t0, DELTATIME
+  li t1, 10000
+  sw t1, 0(t0)
+
   xori s4, s4, 1
   ret
 
