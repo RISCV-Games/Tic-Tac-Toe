@@ -82,6 +82,7 @@ GAME_LOOP:
 
 # Data includes
 .data
+.align 2
 .include "../data/Board.data"
 .include "../data/MenuGanhou.data"
 .include "../data/MenuPerdeu.data"

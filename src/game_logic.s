@@ -7,9 +7,12 @@
 # SCORE + 0 = &WINS
 # SCORE + 1 = &LOSSES
 # SCORE + 2 = &TOTAL
+.align 1
 SCORE: .byte 0 0 0
+.align 2
 LINE_AMT: .float 1.0e-2
-STRING_TEST: .string "------\n";
+.align 2
+STRING_TEST: .string "------\n"
 
 .text
 

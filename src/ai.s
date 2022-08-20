@@ -1,4 +1,5 @@
 .data
+.align 0
 currentPlayer: .byte 0
 
 .text

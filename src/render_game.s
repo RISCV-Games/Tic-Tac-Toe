@@ -26,7 +26,7 @@ RENDER_GAME:
   lw t1, 0(t0)
   sub t2, a0, t1
   li t3, 60
-  bge t2, t3, RENDER_GAME_NEXT
+  bgeu t2, t3, RENDER_GAME_NEXT
   ret
 
 RENDER_GAME_NEXT:
