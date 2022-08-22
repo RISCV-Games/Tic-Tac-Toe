@@ -17,10 +17,10 @@ ENEMY_OUTPUT:
   j FIM_ENEMY_OUTPUT
   
 GET_EASY_OUTPUT:
-  li a0, 0 # Lower bound 
-  li a1, 9 # Upper bound
-  li a7, 42 # Get random number from lowwer bound to uppwer bound
-  ecall
+  # Generate random number
+  csrr a0, time
+  li t0, 9
+  remu a0, a0, t0
 
   la t0, BOARD
   add t0, t0, a0

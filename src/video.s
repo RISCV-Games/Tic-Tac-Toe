@@ -13,6 +13,9 @@
 #################################################
 
 RENDER:
+	li t0, 0xfffffffc
+	and a1, a1, t0
+	and a2, a2, t0
 	mv t0, s1
 	add t0,t0,a1			# adiciona x ao t0
 	

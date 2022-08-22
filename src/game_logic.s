@@ -171,6 +171,8 @@ CHECK_VICTORY_CONDITION:
   ecall
 
   la a0, telaVelha
+  li a1, 0
+  li a2, 0
   jal RENDER
   jal SWAP_FRAMES
   li a7, 32

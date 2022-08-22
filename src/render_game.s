@@ -19,8 +19,7 @@ DELTATIME: .word 0
 RENDER_GAME:
   # Saving return address in the stack
 
-  li a7, 30
-  ecall 
+  csrr a0, time
 
   la t0, DELTATIME
   lw t1, 0(t0)

@@ -45,8 +45,7 @@ MENU_INPUT_LOOP:
   j MENU_INPUT_LOOP
 
 MENU_SAIR:
-  li a7, 10
-  ecall
+	j MENU_SAIR
 
 MENU_OP:
   addi a0, t2, -0x31
