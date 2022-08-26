@@ -5,7 +5,7 @@
 #   s3: current frame address
 #   s4: turn (0 - Player, 1 - ENEMY)
 #   s5: dificulty
-#	  s6: starting player (0 - Player, 1 - ENEMY)
+#	s6: starting player (0 - Player, 1 - ENEMY)
 
 .include "MACROSv21.s"
 
@@ -84,7 +84,6 @@ GAME_LOOP:
 # Data includes
 .data
 .align 2
-.include "../data/Board.data"
 .include "../data/MenuGanhou.data"
 .include "../data/MenuPerdeu.data"
 .include "../data/MenuEmpatou.data"

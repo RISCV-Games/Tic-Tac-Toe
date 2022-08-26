@@ -28,6 +28,8 @@ INPUT:
 	beq t2 ,t0, OP
 	li t0, 0x20			#ENTER
 	beq t2, t0, INPUT_FIM
+	li t0, 'c'
+	beq t2, t0, MENU_CHEAT
 	j INPUT_FIM
 
 OP:
@@ -61,3 +63,10 @@ PLAYER_MOVE:
 
 INPUT_FIM:
   ret
+
+MENU_CHEAT:
+	la t0, SCORE
+	li t1, 4
+	sb t1, 0(t0)
+	sb t1, 2(t0)
+	ret
