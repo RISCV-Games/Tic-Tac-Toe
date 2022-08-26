@@ -1,6 +1,18 @@
+.data
+AI_INFO: .word 0 0 # Ciclos por movimento - Tempo por movimento
+
 .text
 ENEMY_OUTPUT:
   beq s4, zero, FIM_ENEMY_OUTPUT
+  # Save current time
+  csrr t1, time
+  la t0, AI_INFO
+  sw a1, 4(t0)
+
+  # Save current cycles
+  la t0, AI_INFO
+  csrr t1, cycle
+  sw t1, 0(t0)
 
   la t0, DELTATIME
   li t1, 10000
@@ -13,8 +25,21 @@ ENEMY_OUTPUT:
   li t0, 2
   beq s5, t0, GET_HARD_OUTPUT # hard
 
-  # Never Reaches
-  j FIM_ENEMY_OUTPUT
+  # calculate time taken by the ai to make a move
+  la t0, AI_INFO
+  lw t1, 4(t0)
+  csrr t2, time
+  sub t1, t2, t1
+  sw t1, 4(t0)
+
+  # calculate cycles taken by the ai to make a move
+  la t0, AI_INFO
+  lw t2, 0(t0)
+  csrr t1, cycle
+  sub t1, t1, t2
+  sw t1, 0(t0)
+
+  ret
   
 GET_EASY_OUTPUT:
   # Generate random number
@@ -176,4 +201,4 @@ GET_HARD_OUTPUT:
   ret
 
 FIM_ENEMY_OUTPUT:
-  ret
+	ret

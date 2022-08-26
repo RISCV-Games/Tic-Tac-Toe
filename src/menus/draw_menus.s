@@ -12,7 +12,13 @@ MenuGanhou_STR_CONTINUAR: .string "1 - Continuar"
 MenuGanhou_STR_SAIR: .string "2 - Sair"
 MenuPerdeu_STR_PRINCIPAL: .string "VOCE PERDEU"
 MenuEmpatou_STR_PRINCIPAL: .string "DEU VELHA!"
-
+MENU_INFORMACOES_STR_FREQ: .string "Frequencia:"
+MENU_INFORMACOES_STR_CICLOS: .string "Ciclos:" 
+MENU_INFORMACOES_STR_INS: .string "Instrucoes:"
+MENU_INFORMACOES_STR_TMP_MEDIDO: .string "Tempo Medido:"
+MENU_INFORMACOES_STR_CPI: .string "CPI Media:"
+MENU_INFORMACOES_STR_TMP_CALC: .string "Tempo Calculado:"
+MENU_INFORMACOES_STR_CONTINUAR: .string "Aperte 1 para continuar o jogo"
 
 .text
 
@@ -192,6 +198,64 @@ MenuEmpatou:
 	ecall
 
     
+    lw ra, 0(sp)
+    addi sp, sp, 4
+    ret
+	
+MENU_INFORMACOES:
+    # saving ra
+    addi sp, sp, -4
+    sw ra, 0(sp)
+
+    li a0, 0
+    jal DRAW_BACKGROUND
+
+	# Draw strings at the back frame
+    la a0, MENU_INFORMACOES_STR_FREQ
+    li a1, 0
+    li a2, 5
+    li a3, 0x38
+    lw a4, 0(s3)
+	xori a4, a4, 1
+    li a7, 104
+    ecall
+
+	la a0, MENU_INFORMACOES_STR_CICLOS
+	li a1, 0
+	li a2, 25
+	ecall
+
+	la a0, MENU_INFORMACOES_STR_INS
+	li a1, 0
+	li a2, 45
+	ecall
+
+	la a0, MENU_INFORMACOES_STR_TMP_MEDIDO
+	li a1, 0
+	li a2, 65
+	ecall
+
+	la a0, MENU_INFORMACOES_STR_CPI
+	li a1, 0
+	li a2, 85
+	ecall
+
+	la a0, MENU_INFORMACOES_STR_TMP_CALC
+	li a1, 0
+	li a2, 105
+	ecall
+
+	la a0, MENU_INFORMACOES_STR_CONTINUAR
+	li a1, 0
+	li a2, 200
+	ecall
+
+	la a0, MenuDificuldades_STR_SAIR
+	li a1, 0
+	li a2, 220
+	ecall
+
+
     lw ra, 0(sp)
     addi sp, sp, 4
     ret
