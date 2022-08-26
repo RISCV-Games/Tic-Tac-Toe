@@ -3,6 +3,7 @@ MenuDificuldades_STR_TITULO:  .string "Jogo da Velha"
 MenuDificuldades_STR_FACIL:   .string "1 - Facil"
 MenuDificuldades_STR_MEDIO:   .string "2 - Medio"
 MenuDificuldades_STR_DIFICIL: .string "3 - Dificil"
+MenuDificuldades_STR_SAIR: .string "Aperte Q para sair"
 
 
 .text
@@ -38,6 +39,11 @@ MenuDificuldades:
 	la a0, MenuDificuldades_STR_DIFICIL
 	li a1, 120
 	li a2, 120
+	ecall
+
+	la a0, MenuDificuldades_STR_SAIR
+	li a1, 175
+	li a2, 220
 	ecall
 
     
