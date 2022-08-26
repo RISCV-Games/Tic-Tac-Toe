@@ -78,6 +78,7 @@ GAME_LOOP:
 .include "ai.s"
 .include "game_logic.s"
 .include "endscreens.s"
+.include "./menus/menuDificuldades.s"
 .include "SYSTEMv21.s"
 
 # Data includes

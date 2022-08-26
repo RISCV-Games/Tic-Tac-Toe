@@ -1,15 +1,15 @@
 .text
 #################################################
-#	a0 = endereco da imagem			#
-#	a1 = x					#
-#	a2 = y					#
+#	a0 = endereco da imagem             #
+#	a1 = x					            #
+#	a2 = y					            #
 #################################################
 #	t0 = endereco do bitmap display		#
-#	t1 = endereco da imagem			#
-#	t2 = contador de linha			#
-# 	t3 = contador de coluna			#
-#	t4 = largura				#
-#	t5 = altura				#
+#	t1 = endereco da imagem			    #
+#	t2 = contador de linha			    #
+# 	t3 = contador de coluna			    #
+#	t4 = largura				        #
+#	t5 = altura				            #
 #################################################
 
 RENDER:
@@ -19,7 +19,7 @@ RENDER:
 	mv t0, s1
 	add t0,t0,a1			# adiciona x ao t0
 	
-	li t1,320			# t1 = 320
+	li t1,320			    # t1 = 320
 	mul t1,t1,a2			# t1 = 320 * y
 	add t0,t0,t1			# adiciona t1 ao t0
 	
@@ -45,17 +45,17 @@ P_LINHA:
 	sub t0,t0,t4			# t0 -= largura da imagem
 	# ^ isso serve pra "pular" de linha no bitmap display
 		
-	mv t3,zero			# zera t3 (contador de coluna)
+	mv t3,zero			    # zera t3 (contador de coluna)
 	addi t2,t2,1			# incrementa contador de linha
 	bgt t5,t2,P_LINHA		# se altura > contador de linha, continue imprimindo
 		
-	ret				# retorna
+	ret				        # retorna
 												
 REV_RENDER:
 	mv t0, s1
 	add t0,t0,a1			# adiciona x ao t0
 	
-	li t1,320			# t1 = 320
+	li t1,320			    # t1 = 320
 	mul t1,t1,a2			# t1 = 320 * y
 	add t0,t0,t1			# adiciona t1 ao t0
 	
@@ -84,8 +84,8 @@ REV_P_LINHA:
 	add t0,t0,t4			# t0 -= largura da imagem
 	# ^ isso serve pra "pular" de linha no bitmap display
 		
-	mv t3,zero			# zera t3 (contador de coluna)
-	addi t2,t2,1			# incrementa contador de linha
+	mv t3,zero			        # zera t3 (contador de coluna)
+	addi t2,t2,1			    # incrementa contador de linha
 	bgt t5,t2,REV_P_LINHA		# se altura > contador de linha, continue imprimindo
 		
 	ret				# retorna
@@ -128,4 +128,20 @@ SWAP_FRAMES:
 	
 	jal REFRESH_BACK_BUFFER_END
 	mv ra,t1
+	ret
+
+# Desenha a cor a0 na tela inteira (preencher o a0 com 4 cores)
+#################################################
+#	a0 = cor da imagem
+#################################################
+#	t0 = endereco do bitmap display		#
+#################################################
+DRAW_BACKGROUND:
+	mv t0, s1
+LOOP_DRAW_BACKGROUND:
+	bge t0, s2, END_DRAW_BACKGROUND
+	sw a0, 0(t0)
+	addi t0, t0, 4
+	j LOOP_DRAW_BACKGROUND
+END_DRAW_BACKGROUND:
 	ret

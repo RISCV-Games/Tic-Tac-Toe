@@ -7,7 +7,7 @@ DRAW_MENU:
 
   li a1, 0
   li a2, 0
-  jal RENDER
+  jal MenuDificuldades
   jal SWAP_FRAMES
 
   lw ra, 0(sp)
