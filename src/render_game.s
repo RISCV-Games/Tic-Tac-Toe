@@ -6,6 +6,11 @@
 .eqv y_tile_offset 80
 
 .data
+DRAW_BOARD_STR_PLACAR: .string "PLACAR"
+DRAW_BOARD_STR_WIN: .string "Wins:"
+DRAW_BOARD_STR_DRAW: .string "Draws:"
+DRAW_BOARD_STR_LOOSE: .string "Losses:"
+
 .align 2
 BOARD: .byte 0, 0, 0, 0, 0, 0, 0, 0, 0
 PLAYER_SYMBOL: .word 0
@@ -34,10 +39,7 @@ RENDER_GAME_NEXT:
   addi sp, sp, -4
   sw ra, 0(sp)
   # Rendering Back Ground
-  la a0, Board
-  li a1, 0
-  li a2, 0
-  jal RENDER
+  jal DRAW_BOARD
 
   # Rendering placar
   addi sp, sp, -32
@@ -56,14 +58,14 @@ RENDER_GAME_NEXT:
   xori a4, a4, 1
 
   # Pritando vitorias
-  li a1, 45 # X
+  li a1, 57 # X
   li a2, 74 # Y
   la a0, SCORE
   lbu a0, 0(a0)
   ecall
 
   # Printando velhas
-  li a1, 45 # X
+  li a1, 57 # X
   li a2, 90 # Y
 
   la a0, SCORE
@@ -75,8 +77,8 @@ RENDER_GAME_NEXT:
   ecall
 
   # Printando derrotas
-  li a1, 45 # X
-  li a2, 107 # Y
+  li a1, 57 # X
+  li a2, 105 # Y
   la a0, SCORE
   lbu a0, 1(a0)
   ecall
@@ -215,3 +217,144 @@ DRAW_ANIMATION_PROX:
   add a0, a0, t1
   lw a0, 0(a0)
   j RENDER
+
+DRAW_BOARD:
+    # saving ra
+    addi sp, sp, -4
+    sw ra, 0(sp)
+
+	# Draw green-ish background
+    li a0, 0x09090909
+    jal DRAW_BACKGROUND
+
+	# Draw strings at the back frame
+    la a0, DRAW_BOARD_STR_PLACAR
+    li a1, 8
+    li a2, 14
+    li a3, 0x000009ff
+    lw a4, 0(s3)
+	xori a4, a4, 1
+    li a7, 104
+    ecall
+
+	la a0, DRAW_BOARD_STR_WIN
+	li a1, 0
+	li a2, 75
+	ecall
+
+	la a0, DRAW_BOARD_STR_DRAW
+	li a1, 0
+	li a2, 90
+	ecall
+
+	la a0, DRAW_BOARD_STR_LOOSE
+	li a1, 0
+	li a2, 105
+	ecall
+
+	# Draw lines
+	li a7, 147
+	mv a5, a4
+	mv a4, a3
+
+	li a0, 79
+	li a1, 0
+	li a2, 79
+	li a3, 239
+	ecall
+
+	li a0, 158
+	li a1, 0
+	li a2, 158
+	li a3, 239
+	ecall
+
+	li a0, 237
+	li a1, 0
+	li a2, 237
+	li a3, 239
+	ecall
+
+	li a0, 319
+	li a1, 0
+	li a2, 319
+	li a3, 239
+	ecall
+
+	li a0, 79
+	li a1, 0
+	li a2, 319
+	li a3, 0
+	ecall
+
+	li a0, 79
+	li a1, 80
+	li a2, 319
+	li a3, 80
+	ecall
+
+	li a0, 79
+	li a1, 160
+	li a2, 319
+	li a3, 160
+	ecall
+
+	li a0, 79
+	li a1, 239
+	li a2, 319
+	li a3, 239
+	ecall
+
+	# Draw key (1, 2, ..., 9) on each tile
+	li a7, 101
+	mv a3, a4
+	mv a4, a5
+
+	li a0, 1
+	li a1, 150
+	li a2, 70
+	ecall
+
+	li a0, 2
+	li a1, 229
+	li a2, 70
+	ecall
+
+	li a0, 3
+	li a1, 309
+	li a2, 70
+	ecall
+
+	li a0, 4
+	li a1, 150
+	li a2, 150
+	ecall
+
+	li a0, 5
+	li a1, 229
+	li a2, 150
+	ecall
+
+	li a0, 6
+	li a1, 309
+	li a2, 150
+	ecall
+
+	li a0, 7
+	li a1, 150
+	li a2, 229
+	ecall
+
+	li a0, 8
+	li a1, 229
+	li a2, 229
+	ecall
+
+	li a0, 9
+	li a1, 309
+	li a2, 229
+	ecall
+    
+    lw ra, 0(sp)
+    addi sp, sp, 4
+    ret

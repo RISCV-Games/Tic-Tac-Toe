@@ -88,8 +88,6 @@ GAME_LOOP:
 .include "../data/MenuGanhou.data"
 .include "../data/MenuPerdeu.data"
 .include "../data/MenuEmpatou.data"
-.include "../data/MenuSimbolos.data"
-.include "../data/MenuDificuldades.data"
 .include "../data/telaVelha.data"
 
 # Animations
