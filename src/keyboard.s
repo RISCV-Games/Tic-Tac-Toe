@@ -28,8 +28,12 @@ INPUT:
 	beq t2 ,t0, OP
 	li t0, 0x20			#ENTER
 	beq t2, t0, INPUT_FIM
-	li t0, 'c'
-	beq t2, t0, MENU_CHEAT
+	li t0, 'w'
+	beq t2, t0, MENU_CHEAT_WIN
+	li t0, 'l'
+	beq t2, t0, MENU_CHEAT_LOOSE
+	li t0, 'd'
+	beq t2, t0, MENU_CHEAT_DRAW
 	j INPUT_FIM
 
 OP:
@@ -64,9 +68,22 @@ PLAYER_MOVE:
 INPUT_FIM:
   ret
 
-MENU_CHEAT:
+MENU_CHEAT_WIN:
 	la t0, SCORE
 	li t1, 4
 	sb t1, 0(t0)
+	sb t1, 2(t0)
+	ret
+
+MENU_CHEAT_LOOSE:
+	la t0, SCORE
+	li t1, 4
+	sb t1, 1(t0)
+	sb t1, 2(t0)
+	ret
+
+MENU_CHEAT_DRAW:
+	la t0, SCORE
+	li t1, 19
 	sb t1, 2(t0)
 	ret

@@ -84,9 +84,6 @@ GAME_LOOP:
 # Data includes
 .data
 .align 2
-.include "../data/MenuGanhou.data"
-.include "../data/MenuPerdeu.data"
-.include "../data/MenuEmpatou.data"
 .include "../data/telaVelha.data"
 
 # Animations
