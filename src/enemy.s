@@ -1,18 +1,19 @@
 .data
+AI_INFO_ANTES: .word 0 0 # Ciclos por movimento - Tempo por movimento
 AI_INFO: .word 0 0 # Ciclos por movimento - Tempo por movimento
 
 .text
 ENEMY_OUTPUT:
-  beq s4, zero, FIM_ENEMY_OUTPUT
+  beq s4, zero, ENEMY_OUTPUT_END
   # Save current time
-  csrr t1, time
-  la t0, AI_INFO
-  sw a1, 4(t0)
+  csrr s10, time
+  # la t0, AI_INFO_ANTES
+  # sw a1, 4(t0)
 
   # Save current cycles
-  la t0, AI_INFO
-  csrr t1, cycle
-  sw t1, 0(t0)
+  # la t0, AI_INFO_ANTES
+  csrr s11, cycle
+  # sw t1, 0(t0)
 
   la t0, DELTATIME
   li t1, 10000
@@ -25,19 +26,23 @@ ENEMY_OUTPUT:
   li t0, 2
   beq s5, t0, GET_HARD_OUTPUT # hard
 
+ENEMY_OUTPUT_RET:
+
   # calculate time taken by the ai to make a move
-  la t0, AI_INFO
-  lw t1, 4(t0)
-  csrr t2, time
-  sub t1, t2, t1
-  sw t1, 4(t0)
+  # la t0, AI_INFO
+  # la t3, AI_INFO_ANTES
+  # lw t1, 4(t3)
+  csrr t0, time
+  sub s10, t0, s10
+  # sw t1, 4(t0)
 
   # calculate cycles taken by the ai to make a move
-  la t0, AI_INFO
-  lw t2, 0(t0)
-  csrr t1, cycle
-  sub t1, t1, t2
-  sw t1, 0(t0)
+  # la t3, AI_INFO_ANTES
+  # la t0, AI_INFO
+  # lw t2, 0(t3)
+  csrr t0, cycle
+  sub s11, t0, s11
+  # sw t1, 0(t0)
 
   ret
   
@@ -56,7 +61,7 @@ GET_EASY_OUTPUT:
   sb t2, 0(t0)
 
   xori s4, s4, 1 # Change Turns
-  ret
+  j ENEMY_OUTPUT_RET
 
 GET_MEDIUM_OUTPUT:
   addi sp, sp, -4
@@ -163,17 +168,16 @@ CONTINUE_LOOP2_GET_MEDIUM_OUTPUT:
   j LOOP2_GET_MEDIUM_OUTPUT
 
 END_LOOP2_GET_MEDIUM_OUTPUT:
-  jal GET_EASY_OUTPUT
   lw ra, 0(sp)
   addi sp, sp, 4
-  ret
+  j GET_EASY_OUTPUT
 
 END_GET_MEDIUM_OUTPUT:
   lw ra, 0(sp)
   addi sp, sp, 4
 
   xori s4, s4, 1
-  ret
+  j ENEMY_OUTPUT_RET
 
 GET_HARD_OUTPUT:
   # currentPlayer = (s4 == 0) ? 1:-1
@@ -198,7 +202,10 @@ GET_HARD_OUTPUT:
   sb t0, 0(t1)
 
   xori s4, s4, 1 # Change Turns
-  ret
+  j ENEMY_OUTPUT_RET
 
 FIM_ENEMY_OUTPUT:
-	ret
+	j ENEMY_OUTPUT_RET
+
+ENEMY_OUTPUT_END:
+  ret

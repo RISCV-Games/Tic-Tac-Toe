@@ -34,6 +34,8 @@ INPUT:
 	beq t2, t0, MENU_CHEAT_LOOSE
 	li t0, 'd'
 	beq t2, t0, MENU_CHEAT_DRAW
+	li t0, 'm'
+	beq t2, t0, MENU_INFORMACOES
 	j INPUT_FIM
 
 OP:

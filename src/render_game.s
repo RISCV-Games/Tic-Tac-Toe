@@ -58,14 +58,14 @@ RENDER_GAME_NEXT:
   xori a4, a4, 1
 
   # Pritando vitorias
-  li a1, 57 # X
+  li a1, 60 # X
   li a2, 74 # Y
   la a0, SCORE
   lbu a0, 0(a0)
   ecall
 
   # Printando velhas
-  li a1, 57 # X
+  li a1, 60 # X
   li a2, 90 # Y
 
   la a0, SCORE
@@ -77,7 +77,7 @@ RENDER_GAME_NEXT:
   ecall
 
   # Printando derrotas
-  li a1, 57 # X
+  li a1, 60 # X
   li a2, 105 # Y
   la a0, SCORE
   lbu a0, 1(a0)
@@ -238,17 +238,17 @@ DRAW_BOARD:
     ecall
 
 	la a0, DRAW_BOARD_STR_WIN
-	li a1, 0
+	li a1, 3
 	li a2, 75
 	ecall
 
 	la a0, DRAW_BOARD_STR_DRAW
-	li a1, 0
+	li a1, 3
 	li a2, 90
 	ecall
 
 	la a0, DRAW_BOARD_STR_LOOSE
-	li a1, 0
+	li a1, 3
 	li a2, 105
 	ecall
 

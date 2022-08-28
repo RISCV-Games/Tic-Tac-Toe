@@ -10,7 +10,7 @@
 .include "MACROSv21.s"
 
 .text
-# Initialization
+# Initialization	
 INIT:
   # Reset board
 	la t0, BOARD 

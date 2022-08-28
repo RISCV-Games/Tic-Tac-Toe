@@ -19,6 +19,8 @@ MENU_INFORMACOES_STR_TMP_MEDIDO: .string "Tempo Medido:"
 MENU_INFORMACOES_STR_CPI: .string "CPI Media:"
 MENU_INFORMACOES_STR_TMP_CALC: .string "Tempo Calculado:"
 MENU_INFORMACOES_STR_CONTINUAR: .string "Aperte 1 para continuar o jogo"
+.eqv FREQ 3571428
+.eqv
 
 .text
 
@@ -220,42 +222,105 @@ MENU_INFORMACOES:
     li a7, 104
     ecall
 
+	# Print freq
+	li a7, 101
+	li a0, FREQ
+	li a1, 180
+	li a2, 5
+	ecall
+
 	la a0, MENU_INFORMACOES_STR_CICLOS
-	li a1, 0
+	li a1, 3
+	li a2, 25
+	li a7, 104
+	ecall
+
+	# Print cycles
+	li a7, 101
+	mv a0, s11
+	li a1, 180
 	li a2, 25
 	ecall
 
 	la a0, MENU_INFORMACOES_STR_INS
-	li a1, 0
+	li a1, 3
+	li a2, 45
+	li a7, 104
+	ecall
+
+	# Print instructions
+	li a7, 101
+	mv a0, s11
+	li a1, 180
 	li a2, 45
 	ecall
 
 	la a0, MENU_INFORMACOES_STR_TMP_MEDIDO
-	li a1, 0
+	li a1, 3
+	li a2, 65
+	li a7, 104
+	ecall
+
+	# Print time
+	li a7, 101
+	mv a0, s10
+	li a1, 180
 	li a2, 65
 	ecall
 
 	la a0, MENU_INFORMACOES_STR_CPI
-	li a1, 0
+	li a1, 3
+	li a2, 85
+	li a7, 104
+	ecall
+
+	# Print cpi
+	li a7, 101
+	li a0, 1
+	li a1, 180
 	li a2, 85
 	ecall
 
 	la a0, MENU_INFORMACOES_STR_TMP_CALC
-	li a1, 0
+	li a1, 3
+	li a2, 105
+	li a7, 104
+	ecall
+
+	# a0 = tempo calculado
+	li a0, FREQ
+	li t0, 1000
+	mul t0, s11, t0
+	divu a0, t0, a0
+
+	# Print tempo calculado
+	li a7, 101
+	li a1, 180
 	li a2, 105
 	ecall
 
 	la a0, MENU_INFORMACOES_STR_CONTINUAR
-	li a1, 0
+	li a1, 3
 	li a2, 200
+	li a7, 104
 	ecall
 
-	la a0, MenuDificuldades_STR_SAIR
-	li a1, 0
-	li a2, 220
-	ecall
+	jal SWAP_FRAMES
+
+MENU_INFORMACOES_INPUT_LOOP:
+  li t1,0xFF200000		      # carrega o endere�o de controle do KDMMIO
+  lw t0,0(t1)			          # Le bit de Controle Teclado
+  andi t0,t0,0x0001		      # mascara o bit menos significativo
+  beq t0,zero, MENU_INFORMACOES_INPUT_LOOP	  # não tem tecla pressionada ent�o volta ao loop
+  lw t2,4(t1)			          # le o valor da tecla
+  	
+  # Go inside options
+  	li t0, '1'
+	beq t2, t0, MENU_INFORMACOES_OP
+  	j MENU_INFORMACOES_INPUT_LOOP
 
 
+MENU_INFORMACOES_OP:
     lw ra, 0(sp)
     addi sp, sp, 4
     ret
